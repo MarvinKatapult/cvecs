@@ -10,7 +10,7 @@ int main() {
 
     updateStrVec(vec, "Bye World :(", vec.count-1);
 
-    for (int i = 0; i < vec.count; i++) {
+    for (unsigned int i = 0; i < vec.count; i++) {
         printf("%s\n", vec.vals[i]);
     }
 

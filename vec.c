@@ -26,7 +26,7 @@ StrVec createStrVec(unsigned int capacity) {
 }
 
 void freeStrVec(StrVec str_vec) {
-    for (int i = 0; i < str_vec.count; i++) {
+    for (unsigned int i = 0; i < str_vec.count; i++) {
         free(str_vec.vals[i]);
     }
     free(str_vec.vals);
