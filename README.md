@@ -2,7 +2,7 @@
 Everyone should have dynamic Arrays in C.
 
 # Getting Started
-You can compile the example with __gcc example.c vec.c -o example__.
+You can compile the example with __gcc example.c vec.c -o example__.<br>
 The Documentation is the Header.
 
 # Current Implementations
