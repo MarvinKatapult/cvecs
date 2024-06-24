@@ -39,14 +39,9 @@ bool appendStrVec(StrVec * str_vec, const char * str) {
     str_vec->count++;
     if (str_vec->capacity < str_vec->count) {
         // Realloc
-        const size_t new_cap = str_vec->capacity + DEFAULT_CAP_STRVEC;
-        void * res = realloc(str_vec->vals, sizeof(char *) * new_cap);
-        str_vec->capacity = new_cap;
-        if (!res) {
-            fprintf(stderr, "Realloc failed: %s %d\n", __FILE__, __LINE__);
-            return false;
-        }
-        str_vec->vals = res;
+        unsigned int new_cap = str_vec->capacity;
+        new_cap += ((float)str_vec->capacity / DEFAULT_CAP_STRVEC) * DEFAULT_CAP_STRVEC;
+        setCapacity(str_vec, new_cap);
     }
 
     str_vec->vals[str_vec->count-1] = new_str;
@@ -57,5 +52,19 @@ bool updateStrVec(StrVec str_vec, const char * str, unsigned int pos) {
     if (pos >= str_vec.count) return false;
     free(str_vec.vals[pos]);
     str_vec.vals[pos] = copyCString(str);
+    return true;
+}
+
+bool setCapacity(StrVec * str_vec, unsigned int cap) {
+    if (!str_vec) return false;
+    
+    void * res = realloc(str_vec->vals, sizeof(char *) * cap);
+    str_vec->capacity = cap;
+    if (!res) {
+        fprintf(stderr, "Realloc failed: %s %d\n", __FILE__, __LINE__);
+        return false;
+    }
+    str_vec->vals = res;
+
     return true;
 }

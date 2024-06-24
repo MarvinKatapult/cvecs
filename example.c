@@ -4,7 +4,7 @@
 int main() {
 
     StrVec vec = createStrVec(DEFAULT_CAP_STRVEC);
-    for (int i = 0; i < 100; i++) {
+    for (int i = 0; i < 500; i++) {
         appendStrVec(&vec, "Hello World");
     }
 
