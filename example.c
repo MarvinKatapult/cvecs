@@ -3,17 +3,22 @@
 
 int main() {
 
-    StrVec vec = createStrVec(DEFAULT_CAP_STRVEC);
-    for (int i = 0; i < 500; i++) {
-        appendStrVec(&vec, "Hello World");
+    StrVec vec = createStrVec(DEFAULT_CAP_VEC);
+    appendStrVec(&vec, "Hello Worldn");
+    appendStrVec(&vec, "Hello Worldadwwada");
+    appendStrVec(&vec, "Hello Worldn");
+    appendStrVec(&vec, "Hello Worldn");
+    appendStrVec(&vec, "Hello Worldn");
+    for (int i = 0; i < 5; i++) {
+        const char num[2] = { i + '0' };
+        appendStrVec(&vec, num);
     }
 
-    updateStrVec(vec, "Bye World :(", vec.count-1);
-
-    for (unsigned int i = 0; i < vec.count; i++) {
+    for (int i = 0; i < vec.count; i++) {
         printf("%s\n", vec.vals[i]);
     }
 
     freeStrVec(vec);
+
     return 0;
 }

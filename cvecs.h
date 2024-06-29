@@ -26,22 +26,25 @@
 #ifndef __VEC_H__
 #define __VEC_H__
 #include <stdbool.h>
+#include <stddef.h>
 
 /** BEGIN OF STRVEC **/
-#define DEFAULT_CAP_STRVEC          69
+#define DEFAULT_CAP_VEC     69
 
 typedef struct StrVec {
-    unsigned int count;
-    unsigned int capacity;
+    size_t count;
+    size_t capacity;
     char ** vals;
 } StrVec;
 
-StrVec createStrVec(unsigned int capacity); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_STRVEC)
-void freeStrVec(StrVec str_vec);            // Frees Memory of StrVec
+StrVec createStrVec(size_t capacity); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
+void freeStrVec(StrVec str_vec);      // Frees Memory of StrVec
 
-bool appendStrVec(StrVec * str_vec, const char * str);                      // Appends to StrVec
-bool updateStrVec(StrVec str_vec, const char * str, unsigned int pos);      // Updates Value at position
-bool setCapacity(StrVec * str_vec, unsigned int cap);                       // Sets Capacity and reallocs
+bool appendStrVec(StrVec * str_vec, const char * str);           // Appends to StrVec
+bool updateStrVec(StrVec str_vec, const char * str, size_t pos); // Updates Value at position
+bool setStrVecCapacity(StrVec * str_vec, size_t cap);            // Sets Capacity and reallocs
 /** END OF STRVEC **/
+
+bool setVecCapacity(void ** start, size_t cap, size_t size);
 
 #endif // __VEC_H__
