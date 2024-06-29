@@ -28,16 +28,44 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-/** BEGIN OF STRVEC **/
 #define DEFAULT_CAP_VEC     69
 
+/** BEGIN OF VEC **/
+#define VEC_ENTRY_OTHER     0
+#define VEC_ENTRY_NUM       1
+#define VEC_ENTRY_DEC       2
+#define VEC_ENTRY_STR       3
+
+typedef struct VecEntry {
+    void * val;
+    unsigned int type;
+} VecEntry;
+
+typedef struct Vec {
+    size_t count;
+    size_t capacity;
+    VecEntry * entries;
+} Vec;
+
+Vec createVec(void);              // Creates a Vec with default capacity
+Vec createVecEx(size_t capacity); // Creates a Vec with capacity
+void freeVec(Vec vec);            // Frees Memory of Vec
+
+bool appendVecNum(Vec * vec, long val);         // Appends Number to Vec
+bool appendVecStr(Vec * vec, const char * str); // Appends String to Vec
+bool appendVecDec(Vec * vec, double val);       // Appends Decimal Number to Vec
+bool appendVec(Vec * vec, void * val);       // Appends Decimal Number to Vec
+/** END OF VEC **/
+
+/** BEGIN OF STRVEC **/
 typedef struct StrVec {
     size_t count;
     size_t capacity;
     char ** vals;
 } StrVec;
 
-StrVec createStrVec(size_t capacity); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
+StrVec createStrVec(void); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
+StrVec createStrVecEx(size_t capacity); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
 void freeStrVec(StrVec str_vec);      // Frees Memory of StrVec
 
 bool appendStrVec(StrVec * str_vec, const char * str);           // Appends to StrVec
@@ -45,6 +73,44 @@ bool updateStrVec(StrVec str_vec, const char * str, size_t pos); // Updates Valu
 bool setStrVecCapacity(StrVec * str_vec, size_t cap);            // Sets Capacity and reallocs
 /** END OF STRVEC **/
 
-bool setVecCapacity(void ** start, size_t cap, size_t size);
+/** BEGIN OF INTVEC **/
+typedef struct IntVec {
+    size_t count;
+    size_t capacity;
+    long * vals;
+} IntVec;
+
+IntVec createIntVec(void);              // Creates a IntVec with default capacity
+IntVec createIntVecEx(size_t capacity); // Creates a IntVec with capacity
+void freeIntVec(IntVec int_vec);        // Frees Memory of IntVec
+
+bool appendIntVec(IntVec * int_vec, long val);        // Appends to IntVec
+bool setIntVecCapacity(IntVec * int_vec, size_t cap); // Sets Capacity and reallocs
+/** END OF INTVEC **/
+
+#define PRINT_STR_VEC(STR_VEC)    for (size_t i = 0; i < STR_VEC.count; i++) printf("%s\n", STR_VEC.vals[i])
+#define PRINT_STR_VEC2(STR_VEC)   for (size_t i = 0; i < STR_VEC.count; i++) printf("%s;", STR_VEC.vals[i]); printf("\n")
+
+#define PRINT_INT_VEC(INT_VEC)    for (size_t i = 0; i < INT_VEC.count; i++) printf("%ld\n", INT_VEC.vals[i])
+#define PRINT_INT_VEC2(INT_VEC)   for (size_t i = 0; i < INT_VEC.count; i++) printf("%ld;", INT_VEC.vals[i]); printf("\n")
+
+#define PRINT_VEC2(VEC, FORMAT)  for (size_t i = 0; i < VEC.count; i++) printf(FORMAT, VEC.entries[i].val)
+#define PRINT_VEC(VEC) \
+    for (size_t i = 0; i < VEC.count; i++) { \
+        switch (VEC.entries[i].type) { \
+            case VEC_ENTRY_NUM: \
+                printf("%d\n", *(int *)VEC.entries[i].val); \
+                break; \
+            case VEC_ENTRY_DEC: \
+                printf("%f\n", *(double *)VEC.entries[i].val); \
+                break; \
+            case VEC_ENTRY_STR: \
+                printf("%s\n", (char *)VEC.entries[i].val); \
+                break; \
+            case VEC_ENTRY_OTHER: \
+                printf("%p\n", VEC.entries[i].val); \
+                break; \
+        } \
+    }
 
 #endif // __VEC_H__

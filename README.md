@@ -6,9 +6,6 @@ You can compile the example with __./build.sh__
 The Documentation is the Header.
 
 # Current Implementations
+- Vec    - Generic dynamic Array
 - StrVec - String dynamic Array
-
-# To be implemented
-- Vec - Generic dynamic Array
-- IVec - Integer dynamic Array
-- FVec - Float dynamic Array
+- IntVec - Integer dynamic Array

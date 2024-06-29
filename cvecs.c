@@ -3,6 +3,23 @@
 #include <stdio.h>
 #include <string.h>
 
+static size_t calcNewVecCap(size_t capacity) {
+    return capacity + ((float)capacity / DEFAULT_CAP_VEC) * DEFAULT_CAP_VEC;
+}
+
+static bool setVecCapacity(void ** start, size_t cap, size_t size) {
+    if (!start) return false;
+    
+    void * res = realloc(*start, size * cap);
+    if (!res) {
+        fprintf(stderr, "Realloc failed: %s %d\n", __FILE__, __LINE__);
+        return false;
+    }
+    *start = res;
+
+    return true;
+}
+
 static char * copyCString(const char * str) {
     char * ret = malloc(sizeof(char) * strlen(str));
     if (ret) {
@@ -12,16 +29,24 @@ static char * copyCString(const char * str) {
     return ret;
 }
 
-StrVec createStrVec(size_t capacity) {
+StrVec createStrVec() {
+    char ** vals = calloc(DEFAULT_CAP_VEC, sizeof(char *));
+
+    return (StrVec) {
+        .count = 0,
+        .capacity = DEFAULT_CAP_VEC,
+        .vals = vals
+    };
+}
+
+StrVec createStrVecEx(size_t capacity) {
     char ** vals = calloc(capacity, sizeof(char *));
 
-    StrVec vec = {
+    return (StrVec) {
         .count = 0,
         .capacity = capacity,
         .vals = vals
     };
-
-    return vec;
 }
 
 void freeStrVec(StrVec str_vec) {
@@ -37,9 +62,7 @@ bool appendStrVec(StrVec * str_vec, const char * str) {
 
     str_vec->count++;
     if (str_vec->capacity < str_vec->count) {
-        size_t new_cap = str_vec->capacity;
-        new_cap += ((float)str_vec->capacity / DEFAULT_CAP_VEC) * DEFAULT_CAP_VEC;
-        setStrVecCapacity(str_vec, new_cap);
+        setStrVecCapacity(str_vec, calcNewVecCap(str_vec->capacity));
     }
 
     str_vec->vals[str_vec->count-1] = new_str;
@@ -62,15 +85,147 @@ bool setStrVecCapacity(StrVec * str_vec, size_t cap) {
     return true;
 }
 
-bool setVecCapacity(void ** start, size_t cap, size_t size) {
-    if (!start) return false;
+IntVec createIntVec() {
+    long * vals = calloc(DEFAULT_CAP_VEC, sizeof(long));
+
+    return (IntVec) {
+        .count = 0,
+        .capacity = DEFAULT_CAP_VEC,
+        .vals = vals
+    };
+}
+
+IntVec createIntVecEx(size_t capacity) {
+    long * vals = calloc(capacity, sizeof(long));
+
+    return (IntVec) {
+        .count = 0,
+        .capacity = capacity,
+        .vals = vals
+    };
+}
+
+void freeIntVec(IntVec int_vec) {
+    if (int_vec.vals) free(int_vec.vals);
+}
+
+bool appendIntVec(IntVec * int_vec, long val) {
+    if (!int_vec) return false;
+
+    int_vec->count++;
+    if (int_vec->capacity < int_vec->count) {
+        if (!setIntVecCapacity(int_vec, calcNewVecCap(int_vec->capacity))) return false;
+    }
+    int_vec->vals[int_vec->count-1] = val;
+
+    return true;
+}
+
+bool setIntVecCapacity(IntVec * int_vec, size_t cap) {
+    if (!int_vec) return false;
     
-    void * res = realloc(*start, size * cap);
-    if (!res) {
-        fprintf(stderr, "Realloc failed: %s %d\n", __FILE__, __LINE__);
+    if (!setVecCapacity((void **)&int_vec->vals, cap, sizeof(int))) return false;
+    int_vec->capacity = cap;
+
+    return true;
+}
+
+Vec createVec() {
+    VecEntry * entries = calloc(DEFAULT_CAP_VEC, sizeof(VecEntry));
+
+    return (Vec) {
+        .count = 0,
+        .capacity = DEFAULT_CAP_VEC,
+        .entries = entries,
+    };
+}
+
+Vec createVecEx(size_t capacity) {
+    VecEntry * entries = calloc(capacity, sizeof(VecEntry));
+
+    return (Vec) {
+        .count = 0,
+        .capacity = capacity,
+        .entries = entries,
+    };
+}
+void freeVec(Vec vec) {
+    for (size_t i = 0; i < vec.count; i++) {
+        if (vec.entries[i].type != VEC_ENTRY_OTHER) free((vec.entries + i)->val);
+    }
+    free(vec.entries);
+}
+
+bool appendVecNum(Vec * vec, long val) {
+    if (!vec) return false;
+
+    vec->count++;
+    if (vec->capacity < vec->count) {
+        if (!setVecCapacity((void **)&vec->entries, calcNewVecCap(vec->capacity), sizeof(VecEntry))) return false;
+    }
+
+    long * new_val = malloc(sizeof(long));
+    if (!new_val) {
+        fprintf(stderr, "Malloc failed %s %d\n", __FILE__, __LINE__);
         return false;
     }
-    *start = res;
+
+    *new_val = val;
+    vec->entries[vec->count-1].val = new_val;
+    vec->entries[vec->count-1].type = VEC_ENTRY_NUM;
+
+    return true;
+}
+
+bool appendVecStr(Vec * vec, const char * str) {
+    if (!vec) return false;
+
+    vec->count++;
+    if (vec->capacity < vec->count) {
+        if (!setVecCapacity((void **)&vec->entries, calcNewVecCap(vec->capacity), sizeof(VecEntry))) return false;
+    }
+
+    char * new_val = copyCString(str);
+    if (!new_val) {
+        fprintf(stderr, "Malloc failed %s %d\n", __FILE__, __LINE__);
+        return false;
+    }
+    vec->entries[vec->count-1].val = new_val;
+    vec->entries[vec->count-1].type = VEC_ENTRY_STR;
+
+    return true;
+}
+
+bool appendVecDec(Vec * vec, double val) {
+    if (!vec) return false;
+
+    vec->count++;
+    if (vec->capacity < vec->count) {
+        if (!setVecCapacity((void **)&vec->entries, calcNewVecCap(vec->capacity), sizeof(VecEntry))) return false;
+    }
+
+    double * new_val = malloc(sizeof(double));
+    if (!new_val) {
+        fprintf(stderr, "Malloc failed %s %d\n", __FILE__, __LINE__);
+        return false;
+    }
+    *new_val = val;
+    vec->entries[vec->count-1].val = new_val;
+    vec->entries[vec->count-1].type = VEC_ENTRY_DEC;
+
+    return true;
+}
+
+bool appendVec(Vec * vec, void * val) {
+    if (!vec) return false;
+
+    vec->count++;
+    if (vec->capacity < vec->count) {
+        if (!setVecCapacity((void **)&vec->entries, calcNewVecCap(vec->capacity), sizeof(VecEntry))) return false;
+    }
+
+    vec->entries[vec->count-1].val = val;
+    vec->entries[vec->count-1].type = VEC_ENTRY_OTHER;
 
     return true;
 }
