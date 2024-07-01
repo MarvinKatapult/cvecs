@@ -229,3 +229,32 @@ bool appendVec(Vec * vec, void * val) {
 
     return true;
 }
+
+bool deleteVec(Vec * vec, size_t start, size_t end ) {
+    if (!vec) return false;
+    if (start > end) {
+        // Swap
+        size_t t = start;
+        start = end;
+        end = t;
+    }
+
+    if (end > vec->count - 1) return false;
+
+    for (size_t i = start; i <= end; i++) {
+        VecEntry * entry = &vec->entries[i];
+        if (entry->type != VEC_ENTRY_OTHER) {
+            free(entry->val);
+        }
+        entry->type = VEC_ENTRY_OTHER;
+        entry->val = NULL;
+    }
+
+    size_t n = vec->count - end - 1;
+    vec->count -= end - start + 1;
+    if (end != vec->count) {
+        memmove(vec->entries + start, vec->entries + end + 1, sizeof(VecEntry) * n);
+    }
+
+    return true;
+}

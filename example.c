@@ -6,18 +6,15 @@ int main() {
 
     /********************/
     Vec vec = createVec();
-    int num[] = { 1, 2, 3, 4, 5 };
-    for (int i = 0; i < 5; i++) {
-        appendVecNum(&vec, num[i]);
+    int nums[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+    for (int i = 0; i < 10; i++) {
+        appendVec(&vec, nums + i);
     }
-    appendVecStr(&vec, "Helloooo");
-    int * test = malloc(sizeof(int));
-    *test = 12;
-    appendVec(&vec, (void *)test);
+    deleteVec(&vec, 5, 7);
 
-    PRINT_VEC(vec)
+    PRINT_VEC(vec);
+
     freeVec(vec);
-    free(test);
     /********************/
     /*
     IntVec int_vec = createIntVec();

@@ -51,10 +51,11 @@ Vec createVec(void);              // Creates a Vec with default capacity
 Vec createVecEx(size_t capacity); // Creates a Vec with capacity
 void freeVec(Vec vec);            // Frees Memory of Vec
 
-bool appendVecNum(Vec * vec, long val);         // Appends Number to Vec
-bool appendVecStr(Vec * vec, const char * str); // Appends String to Vec
-bool appendVecDec(Vec * vec, double val);       // Appends Decimal Number to Vec
-bool appendVec(Vec * vec, void * val);       // Appends Decimal Number to Vec
+bool appendVecNum(Vec * vec, long val);               // Appends Number to Vec
+bool appendVecStr(Vec * vec, const char * str);       // Appends String to Vec
+bool appendVecDec(Vec * vec, double val);             // Appends Decimal Number to Vec
+bool appendVec(Vec * vec, void * val);                // Appends generic to Vec
+bool deleteVec(Vec * vec, size_t start, size_t end ); // Removes range(start, end) from vec
 /** END OF VEC **/
 
 /** BEGIN OF STRVEC **/
@@ -64,9 +65,9 @@ typedef struct StrVec {
     char ** vals;
 } StrVec;
 
-StrVec createStrVec(void); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
+StrVec createStrVec(void);              // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
 StrVec createStrVecEx(size_t capacity); // Creates a StrVec with capacity (Normally put DEFAULT_CAP_VEC)
-void freeStrVec(StrVec str_vec);      // Frees Memory of StrVec
+void freeStrVec(StrVec str_vec);        // Frees Memory of StrVec
 
 bool appendStrVec(StrVec * str_vec, const char * str);           // Appends to StrVec
 bool updateStrVec(StrVec str_vec, const char * str, size_t pos); // Updates Value at position
