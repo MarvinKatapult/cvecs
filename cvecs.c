@@ -252,9 +252,7 @@ bool deleteVec(Vec * vec, size_t start, size_t end ) {
 
     size_t n = vec->count - end - 1;
     vec->count -= end - start + 1;
-    if (end != vec->count) {
-        memmove(vec->entries + start, vec->entries + end + 1, sizeof(VecEntry) * n);
-    }
+    memmove(vec->entries + start, vec->entries + end + 1, sizeof(VecEntry) * n);
 
     return true;
 }
