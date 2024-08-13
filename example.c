@@ -10,9 +10,11 @@ int main() {
     for (int i = 0; i < 10; i++) {
         appendVec(&vec, nums + i);
     }
-    deleteVec(&vec, 5, 7);
+    deleteVec(&vec, nums+2);
 
-    PRINT_VEC(vec);
+    for (size_t i = 0; i < vec.count; i++) {
+        printf("%d\n", *(int *)vec.entries[i].val);
+    }
 
     freeVec(vec);
     /********************/

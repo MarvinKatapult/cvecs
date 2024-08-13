@@ -21,7 +21,7 @@ static bool setVecCapacity(void ** start, size_t cap, size_t size) {
 }
 
 static char * copyCString(const char * str) {
-    char * ret = malloc(sizeof(char) * strlen(str));
+    char * ret = malloc(sizeof(char) * strlen(str) + 1);
     if (ret) {
         strcpy(ret, str);
     }
@@ -230,7 +230,18 @@ bool appendVec(Vec * vec, void * val) {
     return true;
 }
 
-bool deleteVec(Vec * vec, size_t start, size_t end ) {
+bool deleteVec(Vec * vec, void * ptr) {
+    for (size_t i = vec->count - 1;; i--) {
+        if (ptr == vec->entries[i].val) {
+            if (!deleteVecRange(vec, i, i)) return false;
+        }
+
+        if (i == 0) break;
+    }
+    return true;
+}
+
+bool deleteVecRange(Vec * vec, size_t start, size_t end ) {
     if (!vec) return false;
     if (start > end) {
         // Swap
