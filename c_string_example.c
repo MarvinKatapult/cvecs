@@ -6,12 +6,13 @@
 int main() {
 
     StrVec str_vec = createStrVecEx(1);
-    for (int i = 0; i < 1000; i++) {
-        appendStrVec(&str_vec, "Hello");
-    }
+    appendStrVec(&str_vec, "Helloo");
+    String c_str_printf(const char * format, ...);
 
-    for (int i = 0; i < 1000; i++) {
-        updateStrVec(str_vec, "Dies ist meine Nachricht", i);
+    for (size_t i = 0; i < 50; i++) {
+        String str = c_str_printf("%ld", i);
+        insertStrVec(&str_vec, str.s, i);
+        freeString(str);
     }
 
     PRINT_STR_VEC(str_vec);
