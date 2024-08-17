@@ -126,7 +126,9 @@ bool appendStrVec(StrVec * str_vec, const char * str) {
 }
 
 bool insertStrVec(StrVec * str_vec, const char * str, size_t index) {
-    if (!str_vec || index >= str_vec->count) return false;
+    if (!str_vec || index > str_vec->count) return false;
+
+    if (index - 1 == str_vec->count) return appendStrVec(str_vec, str);
 
     str_vec->count++;
     if (str_vec->capacity < str_vec->count) {
