@@ -7,5 +7,5 @@ The Documentation is the Header.
 
 # Current Implementations
 - Vec    - Generic dynamic Array
-- StrVec - String dynamic Array
+- StrVec - String dynamic Array (With or without custom string implementation)
 - IntVec - Integer dynamic Array
