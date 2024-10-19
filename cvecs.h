@@ -55,6 +55,7 @@ bool appendVecNum(Vec * vec, long val);               // Appends Number to Vec
 bool appendVecStr(Vec * vec, const char * str);       // Appends String to Vec
 bool appendVecDec(Vec * vec, double val);             // Appends Decimal Number to Vec
 bool appendVec(Vec * vec, void * val);                // Appends generic to Vec
+void * updateVec(Vec vec, void * val, size_t i);        // Updates Value to Vec
 bool deleteVec(Vec * vec, void * ptr);                // Deletes Ptr from Vec
 bool deleteVecRange(Vec * vec, size_t start, size_t end ); // Removes range(start, end) from vec
 /** END OF VEC **/

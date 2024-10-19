@@ -305,6 +305,20 @@ bool appendVec(Vec * vec, void * val) {
     return true;
 }
 
+void * updateVec(Vec vec, void * val, size_t i) {
+    
+    VecEntry * e = &vec.entries[i];
+    void * old = e->val;
+    if (e->type != VEC_ENTRY_OTHER) {
+        free(old);
+        old = NULL;
+    }
+    
+    e->val = val;
+    // e->type = VEC_ENTRY_OTHER;
+    return old;
+}
+
 bool deleteVec(Vec * vec, void * ptr) {
     for (size_t i = vec->count - 1;; i--) {
         if (ptr == vec->entries[i].val) {
