@@ -315,7 +315,7 @@ void * updateVec(Vec vec, void * val, size_t i) {
     }
     
     e->val = val;
-    // e->type = VEC_ENTRY_OTHER;
+    e->type = VEC_ENTRY_OTHER;
     return old;
 }
 
