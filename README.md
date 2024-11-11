@@ -2,7 +2,7 @@
 Everyone should have dynamic Arrays in C.
 
 # Getting Started
-You can compile the example with __./build.sh__
+You can compile the example with make
 The Documentation is the Header.
 
 # Current Implementations
