@@ -6,7 +6,6 @@
 int main() {
 
     StrVec str_vec = createStrVecEx(1);
-    appendStrVec(&str_vec, "Helloo");
     String c_str_printf(const char * format, ...);
 
     for (size_t i = 0; i < 50; i++) {

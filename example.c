@@ -7,14 +7,13 @@ int main() {
     /********************/
     Vec vec = createVec();
     int nums[] = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-    for (int i = 0; i < 10; i++) {
+
+    int num = 55;
+    for (size_t i = 0; i < 10; i++) {
         appendVec(&vec, nums + i);
     }
-    deleteVec(&vec, nums+2);
-
-    for (size_t i = 0; i < vec.count; i++) {
-        printf("%d\n", *(int *)vec.entries[i].val);
-    }
+    updateVec(vec, &num, 3);
+    PRINT_VEC(vec);
 
     freeVec(vec);
     /********************/
