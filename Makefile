@@ -6,3 +6,6 @@ all: example
 
 example: cvecs.c cvecs.h example.c
 	$(CC) $(CFLAGS) -o $(BIN) cvecs.c example.c
+
+clean:
+	rm -rf $(BIN)
